@@ -1,0 +1,28 @@
+{
+  "cluster": "my-app-cluster",
+  "serviceName": "order-service",
+  "taskDefinition": "order-service",
+  "desiredCount": 1,
+  "launchType": "FARGATE",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": ["subnet-0de01e708678c1690", "subnet-0a25e39b628b2d75c"],
+      "securityGroups": ["sg-0257512f2ff1ff63c"],
+      "assignPublicIp": "DISABLED"
+    }
+  },
+  "loadBalancers": [{
+    "targetGroupArn": "arn:aws:elasticloadbalancing:ap-south-1:748189524661:targetgroup/my-app-order-tg/1bebab6863108490",
+    "containerName": "order-service",
+    "containerPort": 8082
+  }],
+  "healthCheckGracePeriodSeconds": 120,
+  "deploymentConfiguration": {
+    "minimumHealthyPercent": 50,
+    "maximumPercent": 200
+  },
+  "tags": [
+    {"key": "Project", "value": "my-app"},
+    {"key": "Env", "value": "prod"}
+  ]
+}

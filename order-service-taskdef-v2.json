@@ -1,0 +1,40 @@
+{
+  "family": "order-service",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::748189524661:role/ecsTaskExecutionRole-my-app",
+  "taskRoleArn": "arn:aws:iam::748189524661:role/ecsTaskRole-my-app",
+  "tags": [
+    {"key": "Project", "value": "my-app"},
+    {"key": "Env", "value": "prod"}
+  ],
+  "containerDefinitions": [{
+    "name": "order-service",
+    "image": "748189524661.dkr.ecr.ap-south-1.amazonaws.com/my-app/order-service:latest",
+    "essential": true,
+    "portMappings": [{
+      "containerPort": 8082,
+      "protocol": "tcp"
+    }],
+    "environment": [
+      {"name": "SERVER_PORT", "value": "8082"}
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/order-service",
+        "awslogs-region": "ap-south-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "healthCheck": {
+      "command": ["CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1"],
+      "interval": 30,
+      "timeout": 5,
+      "retries": 3,
+      "startPeriod": 60
+    }
+  }]
+}

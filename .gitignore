@@ -1,0 +1,3 @@
+my-app/**/target/
+*.jar.original
+~/.aws/
